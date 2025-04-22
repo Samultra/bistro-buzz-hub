@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from '@/components/ui/use-toast'
 import { useAuth } from '@/lib/auth'
 import { Star } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 interface ReviewFormProps {
   restaurantId: string
@@ -18,6 +19,7 @@ export function ReviewForm({ restaurantId, restaurantName, onSuccess }: ReviewFo
   const [comment, setComment] = useState('')
   const { user } = useAuth()
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -58,7 +60,7 @@ export function ReviewForm({ restaurantId, restaurantName, onSuccess }: ReviewFo
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+          <Button variant="outline" onClick={() => navigate('/auth')}>
             Войти
           </Button>
         </CardFooter>
@@ -76,20 +78,20 @@ export function ReviewForm({ restaurantId, restaurantName, onSuccess }: ReviewFo
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
                 className="focus:outline-none"
-                onClick={() => setRating(star)}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
+                onClick={() => setRating(star)}
               >
                 <Star
-                  className={`w-8 h-8 ${
+                  className={`h-6 w-6 ${
                     star <= (hoverRating || rating)
-                      ? 'text-yellow-400 fill-yellow-400'
+                      ? 'fill-yellow-400 text-yellow-400'
                       : 'text-gray-300'
                   }`}
                 />

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from '@/lib/auth'
 import { useToast } from '@/components/ui/use-toast'
+import { useNavigate } from 'react-router-dom'
 
 type AuthMode = 'login' | 'register'
 
@@ -14,6 +15,7 @@ export function AuthForm() {
   const [name, setName] = useState('')
   const { setUser, setToken } = useAuth()
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,6 +29,7 @@ export function AuthForm() {
           title: 'Успешный вход',
           description: 'Добро пожаловать в Bistro Buzz Hub!',
         })
+        navigate('/')
       } else {
         // Здесь будет реальный API-запрос для регистрации
         const mockUser = { id: '1', email, name, role: 'user' as const }
@@ -36,6 +39,7 @@ export function AuthForm() {
           title: 'Регистрация успешна',
           description: 'Добро пожаловать в Bistro Buzz Hub!',
         })
+        navigate('/')
       }
     } catch (error) {
       toast({

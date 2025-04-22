@@ -8,6 +8,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
+import { useNavigate } from 'react-router-dom'
 
 interface BookingFormProps {
   restaurantId: string
@@ -20,6 +21,7 @@ export function BookingForm({ restaurantId, restaurantName }: BookingFormProps) 
   const [guests, setGuests] = useState<string>('2')
   const { user } = useAuth()
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const availableTimes = [
     "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
@@ -64,7 +66,7 @@ export function BookingForm({ restaurantId, restaurantName }: BookingFormProps) 
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+          <Button variant="outline" onClick={() => navigate('/auth')}>
             Войти
           </Button>
         </CardFooter>
@@ -73,11 +75,11 @@ export function BookingForm({ restaurantId, restaurantName }: BookingFormProps) 
   }
 
   return (
-    <Card className="w-[350px]">
+    <Card>
       <CardHeader>
-        <CardTitle>Забронировать столик</CardTitle>
+        <CardTitle>Бронирование столика</CardTitle>
         <CardDescription>
-          Выберите дату и время для бронирования
+          Выберите дату, время и количество гостей
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -89,10 +91,8 @@ export function BookingForm({ restaurantId, restaurantName }: BookingFormProps) 
               selected={date}
               onSelect={setDate}
               className="rounded-md border"
-              disabled={(date) => date < new Date()}
             />
           </div>
-          
           <div className="space-y-2">
             <label className="text-sm font-medium">Время</label>
             <Select value={time} onValueChange={setTime}>
@@ -100,15 +100,14 @@ export function BookingForm({ restaurantId, restaurantName }: BookingFormProps) 
                 <SelectValue placeholder="Выберите время" />
               </SelectTrigger>
               <SelectContent>
-                {availableTimes.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
+                {availableTimes.map((time) => (
+                  <SelectItem key={time} value={time}>
+                    {time}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-
           <div className="space-y-2">
             <label className="text-sm font-medium">Количество гостей</label>
             <Select value={guests} onValueChange={setGuests}>
@@ -116,15 +115,14 @@ export function BookingForm({ restaurantId, restaurantName }: BookingFormProps) 
                 <SelectValue placeholder="Выберите количество гостей" />
               </SelectTrigger>
               <SelectContent>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                  <SelectItem key={n} value={n.toString()}>
-                    {n} {n === 1 ? 'гость' : n < 5 ? 'гостя' : 'гостей'}
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                  <SelectItem key={num} value={num.toString()}>
+                    {num} {num === 1 ? 'гость' : num < 5 ? 'гостя' : 'гостей'}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-
           <Button type="submit" className="w-full">
             Забронировать
           </Button>
